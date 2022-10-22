@@ -1,8 +1,6 @@
 package serveur;
 
-import jeu.Jeu;
-import jeu.JeuADeux;
-import jeu.JeuSimple;
+import jeu.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,6 +50,11 @@ public class Serveur extends Thread {
 
     public void newGame(BufferedReader in, PrintStream out) throws IOException {
         Jeu j = init(in, out);
+        if(j == null){
+            out.close();
+            in.close();
+            socket.close();
+        }
         j.init();
         while(!j.isWon() && !j.isEnd()) {
             j.game();
@@ -71,7 +74,8 @@ public class Serveur extends Thread {
     public Jeu init(BufferedReader in, PrintStream out) {
         String info = "Bonjour, quel partie souhaite tu lancer ? (Il suffit d'indiquer le numéro de la partie)\n";
         info += "0 : Jeu Simple \n";
-        info += "1 : Jeu Simple \n";
+        info += "1 : Jeu Inverse \n";
+        info += "2 : Jeu A Difficulte \n";
         info += "2 : Quitter \n";
         out.println(info);
         String input = "";
@@ -94,8 +98,9 @@ public class Serveur extends Thread {
         if(input == null) return null;
         return switch (Integer.parseInt(input)) {
             case 0 -> new JeuSimple(in,out);
-            case 1 -> new JeuADeux(in,out);
-            case 2 -> null;
+            case 1 -> new JeuInverse(in,out);
+            case 2 -> new JeuADifficulte(in,out);
+            case 3 -> null;
             default -> null;
         };
     }

@@ -12,14 +12,6 @@ public class JeuSimple extends Jeu{
 
 
     @Override
-    public boolean init() throws IOException {
-        out.println("Bienvenue dans le jeu Simple !\nAppuyer sur entrée pour continuer !");
-        in.readLine();
-        return false;
-    }
-
-
-    @Override
     public String getNom() {
         return "Jeu simple";
     }

@@ -14,13 +14,13 @@ public abstract class Jeu {
     PrintStream out;
     private final ArrayList<Character> motAct;
 
-    private String motChoisis;
+    protected String motChoisis;
     private int maxFails;
 
     private int nbFails = 0;
 
     private ArrayList<String> lMots;
-    private ArrayList<Character> lLettres;
+    protected ArrayList<Character> lLettres;
 
 
     public Jeu(BufferedReader in, PrintStream out) {
@@ -43,7 +43,7 @@ public abstract class Jeu {
     public boolean newGame() {
         String info = "";
         if(isWon()){
-            info +="Bravo ! Vous avez gagner ! Le mot était : "+ motChoisis+ "\n";
+            info +="Bravo ! Vous avez gagné ! Le mot était : "+ motChoisis+ "\n";
         }else{
             info +="Dommage ! Vous avez perdu! Le mot était : "+ motChoisis+ "\n";
         }
@@ -95,7 +95,11 @@ public abstract class Jeu {
         return false;
     }
 
-    public abstract boolean init() throws IOException;
+    public boolean init() throws IOException {
+        out.println("Bienvenue dans le "+getNom()+"!\nAppuyer sur entrée pour continuer !");
+        in.readLine();
+        return false;
+    }
 
     public void game() throws IOException {
         String info = "Voici l'état du Jeu : " + getEtatMot() + "\n";
@@ -135,6 +139,7 @@ public abstract class Jeu {
         }
         return message;
     }
+
 
     public void sendMessage(String info){
         out.println(info);
