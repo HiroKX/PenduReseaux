@@ -41,20 +41,16 @@ public class Serveur extends Thread {
     public void traitements() {
         try {
             String message = "";
-
-            System.out.println("Connexion avec le client : " + socket.getInetAddress());
-
+            System.out.println("Connexion avec le client : " + socket.getInetAddress()+"\nChannel : "+socket.getChannel()+"\nPort :"+socket.getPort());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
             newGame(in,out);
-            //socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void newGame(BufferedReader in, PrintStream out) throws IOException {
-        System.out.println("laaa");
         Jeu j = init(in, out);
         j.init();
         while(!j.isWon() && !j.isEnd()) {
@@ -62,6 +58,12 @@ public class Serveur extends Thread {
         }
         if(j.newGame()){
             newGame(in,out);
+        }
+        else{
+            out.println("Au revoir !");
+            out.close();
+            in.close();
+            socket.close();
         }
     }
 
@@ -75,8 +77,6 @@ public class Serveur extends Thread {
         String input = "";
         try {
             input = in.readLine();
-            System.out.println(input);
-
             while (input.length() > 1 || !input.matches("[^[a-zA-Z]+$]")) {
                 out.println(info);
                 input = in.readLine();

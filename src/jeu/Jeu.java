@@ -38,20 +38,22 @@ public abstract class Jeu {
         lMots.add("main");
         lMots.add("malin");
         this.motChoisis = lMots.get(new Random().nextInt((lMots.size())));
-        System.out.println(this.motChoisis);
     }
 
     public boolean newGame() {
-        String info = "Voulez vous commencer une autre partie ? (0 : Non, 1 : Oui)";
-        out.println(info);
+        String info = "";
+        if(isWon()){
+            info +="Bravo ! Vous avez gagner ! Le mot était : "+ motChoisis+ "\n";
+        }else{
+            info +="Dommage ! Vous avez perdu! Le mot était : "+ motChoisis+ "\n";
+        }
+        info += "Voulez vous commencer une autre partie ? (0 : Non, 1 : Oui)";
+        sendMessage(info);
         try {
             String input = "a";
             while (!Objects.equals(input, "0") && !Objects.equals(input, "1")) {
-                out.println(info);
-                input = in.readLine();
-                while (in.ready()) {
-                    input = in.readLine();
-                }
+                input = waitMessage();
+                sendMessage(info);
             }
             return Objects.equals(input, "1");
         } catch (IOException e) {
@@ -95,20 +97,13 @@ public abstract class Jeu {
 
     public abstract boolean init() throws IOException;
 
-    public void game() {
+    public void game() throws IOException {
         String info = "Voici l'état du Jeu : " + getEtatMot() + "\n";
         info += "Il vous reste : " + (this.getMaxFails() - this.getNbFails()) + "/" + this.getMaxFails() + " essais";
         out.println(info);
         String message = "";
         while (message.length() == 0) {
-            try {
-                message = in.readLine();
-                while (in.ready() && message == null) {
-                    message = in.readLine();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            message = waitMessage();
         }
         if (message.length() == 1) {
             if (!addLettres(message)){
@@ -117,21 +112,14 @@ public abstract class Jeu {
         }
     }
 
-    public void repeatGame() {
+    public void repeatGame() throws IOException {
         String info = "Voici l'état du Jeu : " + getEtatMot() + "\n";
         info += "Il vous reste : " + (this.getMaxFails() - this.getNbFails()) + "/" + this.getMaxFails() + " essais \n";
         info += "Vous avez rentrer une lettre déjà présente.";
-        out.println(info);
+        sendMessage(info);
         String message = "";
         while (message.length() == 0) {
-            try {
-                message = in.readLine();
-                while (in.ready() && message == null) {
-                    message = in.readLine();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            message = waitMessage();
         }
         if (message.length() == 1) {
             if (!addLettres(message)){
@@ -139,6 +127,20 @@ public abstract class Jeu {
             }
         }
     }
+
+    public String waitMessage() throws IOException {
+        String message = in.readLine();
+        while (in.ready() && message == null) {
+            message = in.readLine();
+        }
+        return message;
+    }
+
+    public void sendMessage(String info){
+        out.println(info);
+    }
+
+
     public boolean isWon(){
         return Objects.equals(getEtatMot(), motChoisis);
     }

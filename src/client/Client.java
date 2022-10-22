@@ -3,6 +3,7 @@ package client;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Client {
@@ -21,15 +22,23 @@ public class Client {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
             while(true) {
-                System.out.println(in.readLine());
+                String message = in.readLine();
+                System.out.println(message);
                 while (in.ready()) {
-                    System.out.println(in.readLine());
+                    message = in.readLine();
+                    System.out.println(message);
                 }
-                String message = reader.readLine();
-                out.println(message);
+                if(Objects.equals(message, "Au revoir !")){
+                    out.close();
+                    in.close();
+                    socket.close();
+                }else {
+                    message = reader.readLine();
+                    out.println(message);
+                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Deconnecter");
         }
     }
 
