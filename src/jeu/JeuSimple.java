@@ -14,7 +14,7 @@ public class JeuSimple extends Jeu{
     @Override
     public boolean init() throws IOException {
         out.println("Bienvenue dans le jeu Simple !\nAppuyer sur entrée pour continuer !");
-        //in.readLine();
+        in.readLine();
         return false;
     }
 

@@ -86,9 +86,9 @@ public abstract class Jeu {
     }
 
     public boolean addLettres(String c) {
-        if (!lLettres.contains(c.charAt(0))) {
-            lLettres.add(c.charAt(0));
-            if (!motChoisis.contains(c))
+        if (!lLettres.contains(c.toLowerCase().charAt(0))) {
+            lLettres.add(c.toLowerCase().charAt(0));
+            if (!motChoisis.contains(c.toLowerCase()))
                 nbFails++;
             return true;
         }

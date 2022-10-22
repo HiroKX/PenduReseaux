@@ -40,9 +40,10 @@ public class JeuInverse extends Jeu{
         letters.add('y');
         letters.add('z');
     }
-    
+
     @Override
     public boolean init() throws IOException {
+
         return false;
     }
 
