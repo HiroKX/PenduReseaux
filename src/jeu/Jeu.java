@@ -19,6 +19,8 @@ public abstract class Jeu {
 
     private int nbFails = 0;
 
+    private long startChrono, finChrono;
+
     private ArrayList<String> lMots;
     protected ArrayList<Character> lLettres;
 
@@ -96,6 +98,7 @@ public abstract class Jeu {
     }
 
     public boolean init() throws IOException {
+        ChoisirCHrono();
         out.println("Bienvenue dans le "+getNom()+"!\nAppuyer sur entrée pour continuer !");
         in.readLine();
         return false;
@@ -151,7 +154,35 @@ public abstract class Jeu {
     }
 
     public boolean isEnd(){
-        return nbFails==maxFails;
+        if(nbFails==maxFails || finChrono<=System.currentTimeMillis()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public void ChoisirChrono(){
+        out.println("Indiquez le temps du chronometre");
+        String input1 = null;
+        try {
+            input1 = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Chronometre(Long.parseLong(input1));
+    }
+
+    public void Chronometre(long t){
+        StartChrono();
+        FinChrono(t*1000);
+    }
+
+    public void StartChrono(){
+        startChrono = System.currentTimeMillis();
+    }
+
+    public void FinChrono(long t){
+        finChrono = startChrono + t;
     }
 
     public abstract String getNom();
