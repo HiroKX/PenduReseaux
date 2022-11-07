@@ -76,7 +76,8 @@ public class Serveur extends Thread {
         info += "0 : Jeu Simple \n";
         info += "1 : Jeu Inverse \n";
         info += "2 : Jeu A Difficulte \n";
-        info += "2 : Quitter \n";
+        info += "3 : Jeu Chronométré \n";
+        info += "4 : Quitter \n";
         out.println(info);
         String input = "";
         try {
@@ -100,7 +101,8 @@ public class Serveur extends Thread {
             case 0 -> new JeuSimple(in,out);
             case 1 -> new JeuInverse(in,out);
             case 2 -> new JeuADifficulte(in,out);
-            case 3 -> null;
+            case 3 -> new JeuChronometre(in, out);
+            case 4 -> null;
             default -> null;
         };
     }

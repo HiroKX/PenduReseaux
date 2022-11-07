@@ -15,6 +15,7 @@ public class Client {
         DataInputStream userInput;
         PrintStream theOutputStream;
 
+
         try {
             InetAddress serveur = InetAddress.getByName("127.0.0.1");
             socket = new Socket(serveur, port);
