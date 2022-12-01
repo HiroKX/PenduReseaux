@@ -17,9 +17,12 @@ public class Client {
 
 
         try {
-            InetAddress serveur = InetAddress.getByName("127.0.0.1");
-            socket = new Socket(serveur, port);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Entrer l'ip du serveur :");
+            String ip = reader.readLine();
+
+            InetAddress serveur = InetAddress.getByName(ip);
+            socket = new Socket(serveur, port);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
             while(true) {
@@ -35,6 +38,14 @@ public class Client {
                     socket.close();
                 }else {
                     message = reader.readLine();
+                    System.out.println(message);
+                    System.out.println(message.length());
+                    System.out.println(message.matches("[^[a-zA-Z0-9]+$]"));
+
+                    while (message.length() > 1|| message.matches("[^[a-zA-Z0-9]+$]")) {
+                        System.out.println("Cela ne correspond pas au caractères demander...");
+                        message = reader.readLine();
+                    }
                     out.println(message);
                 }
             }

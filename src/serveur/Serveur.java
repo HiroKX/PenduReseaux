@@ -13,6 +13,8 @@ public class Serveur extends Thread {
 
     final static int port = 9632;
     private Socket socket;
+    
+    private ServerSocket socketServeur;
 
     public static void main(String[] args) {
         try {
@@ -38,7 +40,6 @@ public class Serveur extends Thread {
 
     public void traitements() {
         try {
-            String message = "";
             System.out.println("Connexion avec le client : " + socket.getInetAddress()+"\nChannel : "+socket.getChannel()+"\nPort :"+socket.getPort());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintStream out = new PrintStream(socket.getOutputStream());
@@ -51,9 +52,7 @@ public class Serveur extends Thread {
     public void newGame(BufferedReader in, PrintStream out) throws IOException {
         Jeu j = init(in, out);
         if(j == null){
-            out.close();
-            in.close();
-            socket.close();
+            j = init(in, out);
         }
         j.init();
         while(!j.isWon() && !j.isEnd()) {
@@ -64,9 +63,7 @@ public class Serveur extends Thread {
         }
         else{
             out.println("Au revoir !");
-            out.close();
-            in.close();
-            socket.close();
+            this.close(in,out);
         }
     }
 
@@ -97,13 +94,24 @@ public class Serveur extends Thread {
 
     private Jeu createJeu(String input,BufferedReader in,PrintStream out) {
         if(input == null) return null;
-        return switch (Integer.parseInt(input)) {
+        int inputInt = Integer.parseInt(input);
+        return switch (inputInt) {
             case 0 -> new JeuSimple(in,out);
             case 1 -> new JeuInverse(in,out);
             case 2 -> new JeuADifficulte(in,out);
             case 3 -> new JeuChronometre(in, out);
-            case 4 -> null;
+            case 4  -> close(in,out);
             default -> null;
         };
+    }
+    public Jeu close(BufferedReader in,PrintStream out){
+        out.close();
+        try {
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
