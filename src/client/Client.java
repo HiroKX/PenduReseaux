@@ -38,14 +38,10 @@ public class Client {
                     socket.close();
                 }else {
                     message = reader.readLine();
-                    System.out.println(message);
-                    System.out.println(message.length());
-                    System.out.println(message.matches("[^[a-zA-Z0-9]+$]"));
-
-                    while (message.length() > 1|| message.matches("[^[a-zA-Z0-9]+$]")) {
-                        System.out.println("Cela ne correspond pas au caractères demander...");
-                        message = reader.readLine();
-                    }
+                    //while (message.length() > 1|| message.matches("[^[a-zA-Z0-9]+$]")) {
+                        //System.out.println("Cela ne correspond pas au caractères demander...");
+                        //message = reader.readLine();
+                    //}
                     out.println(message);
                 }
             }

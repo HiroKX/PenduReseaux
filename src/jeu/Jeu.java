@@ -103,7 +103,7 @@ public abstract class Jeu {
 
     public void game() throws IOException {
         String info = "Voici l'état du Jeu : " + getEtatMot() + "\n";
-        info += "Il vous reste : " + (this.getMaxFails() - this.getNbFails()) + "/" + this.getMaxFails() + " essais";
+        info += "Il vous reste : " + (this.getMaxFails() - this.getNbFails()) + "/" + this.getMaxFails() + " vies";
         out.println(info);
         String message = "";
         while (message.length() == 0) {
